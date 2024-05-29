@@ -1,5 +1,5 @@
 streamlit
 qiskit
-qiskit-aer
-qiskit-ibmq-provider
 pennylane
+scikit-learn
+tensorflow
