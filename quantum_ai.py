@@ -14,7 +14,7 @@ def run_quantum_circuit(params):
     return circuit(params)
 
 # Corrected imports for Qiskit
-from qiskit import QuantumCircuit, Aer, transpile
+from qiskit import QuantumCircuit, transpile
 from qiskit.providers.ibmq import IBMQ
 from qiskit.providers.aer import AerSimulator
 
