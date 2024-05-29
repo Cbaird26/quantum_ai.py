@@ -14,12 +14,9 @@ def run_quantum_circuit(params):
     return circuit(params)
 
 # Corrected imports for Qiskit
-import qiskit
-from qiskit import QuantumCircuit, execute
+from qiskit import QuantumCircuit, Aer, transpile
+from qiskit.providers.ibmq import IBMQ
 from qiskit.providers.aer import AerSimulator
-
-# Explicitly define IBMQ
-IBMQ = qiskit.IBMQ
 
 def run_qiskit_circuit():
     # Initialize the IBMQ account
@@ -32,7 +29,10 @@ def run_qiskit_circuit():
     circuit.cx(0, 1)
     circuit.measure([0, 1], [0, 1])
 
-    job = execute(circuit, backend)
+    # Transpile the circuit for the backend
+    transpiled_circuit = transpile(circuit, backend)
+
+    job = backend.run(transpiled_circuit)
     result = job.result()
     counts = result.get_counts()
 
