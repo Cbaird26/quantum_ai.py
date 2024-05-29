@@ -1,42 +1,23 @@
+# app.py
 import streamlit as st
-from qiskit import IBMQ, QuantumCircuit, transpile
-from qiskit.providers.ibmq import least_busy
-from qiskit.tools.monitor import job_monitor
+import pennylane as qml
+from pennylane import numpy as np
 
-def run_ibmq_circuit(api_token):
-    # Save and load IBMQ account
-    IBMQ.save_account(api_token, overwrite=True)
-    IBMQ.load_account()
-    provider = IBMQ.get_provider(hub='ibm-q')
-    
-    # Get the least busy backend with at least 5 qubits
-    backend = least_busy(provider.backends(filters=lambda x: x.configuration().n_qubits >= 5 and not x.configuration().simulator and x.status().operational==True))
-    st.write("Least busy backend:", backend)
+def run_quantum_circuit():
+    dev = qml.device("default.qubit", wires=2)
 
-    # Create a simple quantum circuit
-    qc = QuantumCircuit(2)
-    qc.h(0)
-    qc.cx(0, 1)
-    qc.measure_all()
+    @qml.qnode(dev)
+    def circuit(weights):
+        qml.RX(weights[0], wires=0)
+        qml.RY(weights[1], wires=1)
+        qml.CNOT(wires=[0, 1])
+        qml.RX(weights[2], wires=1)
+        return qml.expval(qml.PauliZ(1))
 
-    # Transpile the circuit for the chosen backend
-    transpiled_qc = transpile(qc, backend)
+    weights = np.array([0.1, 0.2, 0.3], requires_grad=True)
+    return circuit(weights)
 
-    # Run the job on the least busy backend
-    job = backend.run(transpiled_qc)
-    job_monitor(job)
-
-    # Get the result
-    result = job.result()
-    counts = result.get_counts(qc)
-    st.write("Result:", counts)
-
-st.title("Quantum AI on Streamlit")
-
-api_token = st.text_input("Enter your IBMQ API token:", type="password")
-
-if st.button("Run Quantum Circuit"):
-    if api_token:
-        run_ibmq_circuit(api_token)
-    else:
-        st.error("Please enter your IBMQ API token.")
+st.title("Quantum Circuit Runner")
+if st.button("Run Circuit"):
+    result = run_quantum_circuit()
+    st.write("Circuit Result:", result)
