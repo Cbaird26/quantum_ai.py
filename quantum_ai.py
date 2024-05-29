@@ -12,6 +12,8 @@ def run_quantum_circuit(params):
         return qml.expval(qml.PauliZ(0)), qml.expval(qml.PauliZ(1))
 
     return circuit(params)
+
+# Corrected imports for Qiskit
 from qiskit import IBMQ, Aer, execute
 from qiskit import QuantumCircuit
 
