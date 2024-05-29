@@ -18,7 +18,7 @@ from qiskit import IBMQ, QuantumCircuit, execute
 from qiskit.providers.aer import AerSimulator
 
 def run_qiskit_circuit():
-    # Make sure to initialize the IBMQ account
+    # Initialize the IBMQ account
     IBMQ.load_account()
     provider = IBMQ.get_provider(hub='ibm-q')
     backend = provider.get_backend('ibmq_qasm_simulator')
