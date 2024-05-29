@@ -14,8 +14,12 @@ def run_quantum_circuit(params):
     return circuit(params)
 
 # Corrected imports for Qiskit
-from qiskit import IBMQ, QuantumCircuit, execute
+import qiskit
+from qiskit import QuantumCircuit, execute
 from qiskit.providers.aer import AerSimulator
+
+# Explicitly define IBMQ
+IBMQ = qiskit.IBMQ
 
 def run_qiskit_circuit():
     # Initialize the IBMQ account
